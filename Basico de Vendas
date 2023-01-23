@@ -1,0 +1,168 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+int contador=0;
+void cadastrar();
+void vercadastros();
+void venda();
+void estoque();
+
+struct cadastro{
+	int codigo;
+	char nome[20];
+	char descricao[100];
+	float quantidade;
+};
+struct cadastro produtos[32];
+
+void menu(){
+	printf("\nOque deseja?\n\n 1.Cadastro\n 2.Estoque\n 3.Venda\n 0.Sair\n");
+}
+
+void cadastro(){
+	int menu2;
+		
+	printf("\n 1.Cadastrar produtos\n 2.Ver cadastros\n");scanf("%d",&menu2);
+	
+	switch(menu2){
+		case 1:
+		    cadastrar();
+			break;
+		case 2:
+			vercadastros();
+			system("pause");
+			break;
+		default:
+			printf("Invalido");
+	}
+}
+
+void cadastraroutro(){
+	int outrocadastro;
+	printf("\nDeseja cadastrar outro?\n 1.Sim\n 2.Nao\n");scanf("%d",&outrocadastro);
+	if(outrocadastro==1){
+		cadastrar();
+	}
+}
+
+void cadastrar(){
+	contador=contador+1;
+	produtos[contador].codigo=contador;
+	printf("Nome: ");
+	fflush(stdin);
+	gets(produtos[contador].nome);
+	printf("Descricao: ");
+	fflush(stdin);
+	gets(produtos[contador].descricao);
+	printf("Quantidade de entrada: ");
+	scanf("%f",&produtos[contador].quantidade);
+	cadastraroutro();
+}
+
+void vercadastros(){
+	int mostrados;
+	for(mostrados=1;mostrados<=contador;mostrados++){
+	printf("\nCodigo: %d\n",produtos[mostrados].codigo);
+	printf("\nNome: %s\n",produtos[mostrados].nome);
+	printf("Descricao: %s\n",produtos[mostrados].descricao);
+	printf("Quantidade: %.1f\n",produtos[mostrados].quantidade);
+    }
+}
+
+void estoque(){
+	int x2;
+	for(x2=1;x2<=contador;x2++){
+	printf("\nNome: %s\n",produtos[x2].nome);
+	printf("Quantidade: %.1f\n",produtos[x2].quantidade);
+	}
+	system("pause");
+}
+
+void venda(){
+	bool finalizar=false;
+	do{
+	int codigovenda;
+	printf("Em qualquer momento digite '0' (zero) para interromber o processo e cancelar a venda\n\nDigite o codigo do produto: ");scanf("%d",&codigovenda);if(codigovenda==0){break;}
+	if(codigovenda>contador){
+		printf("Produto nao existe!");
+		system("pause");
+		break;
+	}
+	int quantidadevenda;
+	printf("Digite a quantidade vendida de %s: ",produtos[codigovenda].nome);scanf("%d",&quantidadevenda);if(quantidadevenda==0){break;}
+	if(quantidadevenda>produtos[codigovenda].quantidade){
+		printf("\nQuantidade em estoque inferior a da venda, infelizmente vamos cancelar a venda. Verifique o usuario mesmo...\n");
+		printf("\nCodigo: %d\n",produtos[codigovenda].codigo);
+		printf("\nNome: %s\n",produtos[codigovenda].nome);
+		printf("Descricao: %s\n",produtos[codigovenda].descricao);
+		printf("---> Quantidade: %.1f\n",produtos[codigovenda].quantidade);
+		system("pause");
+		system("cls");
+	}else{
+		printf("Venda realizada com sucesso!\n");
+		produtos[codigovenda].quantidade=produtos[codigovenda].quantidade-quantidadevenda;
+		system("pause");
+		finalizar=true;
+	}
+}while(finalizar==false);
+}
+
+void encerrarvenda(){
+	int encerrador;
+	printf(" Encerrar venda?\n  1.Sim\n  2.Nao\n");scanf("%d",&encerrador);
+}
+
+void busca(){
+	
+	char pesquisa[20];
+	
+	printf("Digite o nome do produto:");fflush(stdin);
+	
+	gets(pesquisa);
+	
+	int lacobusca,teste;
+	
+	for(lacobusca=1;lacobusca<=contador;lacobusca++){
+	
+	teste=strcmp(pesquisa,produtos[lacobusca].nome);
+	
+	if(teste==0){
+		printf("Achei ");
+		printf("\nNome: %s\n",produtos[lacobusca].nome);
+		printf("Descricao: \n",produtos[lacobusca].descricao);
+		printf("Quantidade: %.1f\n",produtos[lacobusca].quantidade);
+		break;
+	}
+}
+	system("pause");
+	
+}
+
+main(){
+	int menu1=0;
+	printf("Ola Leozin, ");
+	
+	do{
+	
+	menu();
+	
+	scanf("%d",&menu1);
+	
+	switch(menu1){
+		case 1:
+			cadastro();		
+		break;
+		case 2:
+			estoque();
+		break;
+		case 3:
+			venda();
+		break;
+		default:
+			printf("Invalido");
+	}
+	system("cls");
+}while(menu1!=0);
+	return 0;
+}
